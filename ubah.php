@@ -2,6 +2,16 @@
   require "config.php";
   $id = $_GET["id"];
   $data = detailData($id);
+  if( isset($_POST["submit"]) ){
+    if( ubahMahasiswa($_POST) > 0 ){
+      $_SESSION["pesan"] = ["data" => "mahasiswa", "notif" => "berhasil diubah", "color" => "primary"];
+      header("Location:mahasiswa.php");
+      exit;
+      die;
+    }else{
+      $_SESSION["pesan"] = ["data" => "mahasiswa", "notif" => "gagal diubah", "color" => "danger"];
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,33 +99,63 @@
             <div class="col-md-12 grid-margin">
               
               <!-- content -->
-              
+
+              <!-- alert -->
+              <?php
+                if( isset($_SESSION["pesan"]) && $_SESSION["pesan"] !== NULL ) :
+              ?>
+                <div class="alert bg-<?= $_SESSION["pesan"]["color"] ?> text-white alert-dismissible fade show" role="alert">
+                  Data <?= $_SESSION["pesan"]["data"] ?> <strong><?= $_SESSION["pesan"]["notif"] ?>!</strong>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              <?php
+              endif;
+              ?>
+              <!-- end alert -->
+
               <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                  <h3 class="font-weight-bold">Detail Mahasiswa</h3>
-                  <h6 class="font-weight-normal mb-0">Berikut adalah data lengkap dari data mahasiswa</h6>
+                  <h3 class="font-weight-bold">Ubah Data Mahasiswa</h3>
+                  <h6 class="font-weight-normal mb-0">Silahkan ubah data mahasiswa</h6>
                   <a href="mahasiswa.php" class="btn btn-danger btn-sm mt-3">Kembali</a>
                 </div>
               </div>
-
+              
               <div class="row mt-4">
-                <div class="col-xl-7 col-lg-9 col-md-12">
-                  <div class="card mb-3 overflow-hidden">
-                    <div class="row no-gutters">
-                      <div class="col-md-4">
-                        <img src="images/faces/prople-detail.jpg" class="w-100">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="card-body">
-                          <h5 class="card-title">Detail Data Mahasiswa</h5>
-                          <p class="card-text">NPM : <?= $data["npmMhs"] ?></p>
-                          <p class="card-text">Nama : <?= $data["namaMahasiswa"] ?></p>
-                          <p class="card-text">Jurusan : <?= $data["jurusan"] ?></p>
+                
+                <!-- form tambah data mahasiswa -->
+                <div class="col-xl-7 col-lg-8 col-md-12">
+                  
+                  <div class="card">
+                    <div class="card-body">
+                      <!-- form -->
+                      <form action="" method="post">
+                        <input type="hidden" name="idMhs" value="<?= $data["idMhs"] ?>">
+                        <div class="form-group">
+                          <label for="npm" class="font-weight-500">NPM :</label>
+                          <input required type="number" name="npmMhs" id="npm" class="form-control" placeholder="Isi NPM mahasiswa" value="<?= $data["npmMhs"] ?>">
                         </div>
-                      </div>
+                        <div class="form-group">
+                          <label for="nama" class="font-weight-500">Nama :</label>
+                          <input required type="text" name="namaMahasiswa" id="nama" class="form-control" placeholder="Isi nama mahasiswa" value="<?= $data["namaMahasiswa"] ?>">
+                        </div>
+                        <div class="form-group">
+                          <label for="jurusan" class="font-weight-500">Jurusan :</label>
+                          <input required type="text" name="jurusan" id="jurusan" class="form-control" placeholder="Isi jurusan mahasiswa"value="<?= $data["jurusan"] ?>">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" name="submit">Ubah</button>
+
+                      </form>
+                      <!-- end form -->
+
                     </div>
                   </div>
                 </div>
+                <!-- form tambah data mahasiswa -->
+
               </div>
 
               <!-- end content -->
@@ -150,8 +190,13 @@
   <script src="js/off-canvas.js"></script>
   <script src="js/hoverable-collapse.js"></script>
   <script src="js/template.js"></script>
+  <script src="vendors/jquery/jquery.js"></script>
+  <script src="js/script.js"></script>
   <!-- endinject -->
 </body>
 
 </html>
 
+<?php
+  stopSession();
+?>

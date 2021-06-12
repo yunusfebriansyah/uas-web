@@ -1,3 +1,14 @@
+<?php
+  require "config.php";
+  $data = readData();
+  if( isset($_POST["submit"]) ){
+    if( tambahMahasiswa($_POST) > 0 ){
+      $_SESSION["pesan"] = ["data" => "mahasiswa", "notif" => "berhasil ditambah", "color" => "primary"];
+    }else{
+      $_SESSION["pesan"] = ["data" => "mahasiswa", "notif" => "gagal ditambah", "color" => "danger"];
+    }
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -86,14 +97,20 @@
               <!-- content -->
 
               <!-- alert -->
-              <div class="alert bg-primary text-white alert-dismissible fade show" role="alert">
-                Data Mahasiswa <strong>berhasil ditambah!</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
+              <?php
+                if( isset($_SESSION["pesan"]) && $_SESSION["pesan"] !== NULL ) :
+              ?>
+                <div class="alert bg-<?= $_SESSION["pesan"]["color"] ?> text-white alert-dismissible fade show" role="alert">
+                  Data <?= $_SESSION["pesan"]["data"] ?> <strong><?= $_SESSION["pesan"]["notif"] ?>!</strong>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              <?php
+              endif;
+              ?>
               <!-- end alert -->
-
+              
               <div class="row">
                 
                 <!-- data mahasiswa -->
@@ -112,17 +129,21 @@
                       </div>
                       <div class="table-responsive">
                         <table class="table table-striped">
-                          <tbody>
-                            <tr>
-                              <td>
-                                Herman Beck
-                              </td>
-                              <td class="text-right">
-                                <a href="" class="btn btn-primary btn-sm">detail</a>
-                                <a href="" class="btn btn-success btn-sm">ubah</a>
-                                <a onclick="return confirm('Yakin ingin menghapus data??')" href="  " class="btn btn-danger btn-sm">hapus</a>
-                              </td>
-                            </tr>
+                          <tbody id="table-content">
+                            <?php
+                              foreach ( $data as $row ) :
+                            ?>
+                              <tr>
+                                <td>
+                                  <?= $row["namaMahasiswa"]; ?>
+                                </td>
+                                <td class="text-right">
+                                  <a href="detail.php?id=<?= $row["idMhs"]; ?>" class="badge badge-primary">detail</a>
+                                  <a href="ubah.php?id=<?= $row["idMhs"]; ?>" class="badge badge-success">ubah</a>
+                                  <a onclick="return confirm('Yakin ingin menghapus data??')" href="hapus.php?id=<?= $row["idMhs"]; ?>" class="badge badge-danger">hapus</a>
+                                </td>
+                              </tr>
+                            <?php endforeach; ?>
                           </tbody>
                         </table>
                       </div>
@@ -144,18 +165,18 @@
                         
                         <div class="form-group">
                           <label for="npm" class="font-weight-500">NPM :</label>
-                          <input type="text" name="npm" id="npm" class="form-control" placeholder="Isi NPM mahasiswa">
+                          <input required type="text" name="npmMhs" id="npm" class="form-control" placeholder="Isi NPM mahasiswa">
                         </div>
                         <div class="form-group">
                           <label for="nama" class="font-weight-500">Nama :</label>
-                          <input type="text" name="nama" id="nama" class="form-control" placeholder="Isi nama mahasiswa">
+                          <input required type="number" name="namaMahasiswa" id="nama" class="form-control" placeholder="Isi nama mahasiswa">
                         </div>
                         <div class="form-group">
                           <label for="jurusan" class="font-weight-500">Jurusan :</label>
-                          <input type="text" name="jurusan" id="jurusan" class="form-control" placeholder="Isi jurusan mahasiswa">
+                          <input required type="text" name="jurusan" id="jurusan" class="form-control" placeholder="Isi jurusan mahasiswa">
                         </div>
                         
-                        <button type="submit" class="btn btn-primary">Tambah</button>
+                        <button type="submit" class="btn btn-primary" name="submit">Tambah</button>
 
                       </form>
                       <!-- end form -->
@@ -199,8 +220,13 @@
   <script src="js/off-canvas.js"></script>
   <script src="js/hoverable-collapse.js"></script>
   <script src="js/template.js"></script>
+  <script src="vendors/jquery/jquery.js"></script>
+  <script src="js/script.js"></script>
   <!-- endinject -->
 </body>
 
 </html>
 
+<?php
+  stopSession();
+?>
