@@ -1,5 +1,12 @@
 <?php
   require "config.php";
+    
+  if( !isset( $_SESSION["login"] ) ){
+    header("Location:index.php");
+    exit;
+    die;
+  }
+
   $data = readData();
   if( isset($_POST["submit"]) ){
     if( tambahMahasiswa($_POST) > 0 ){
@@ -51,7 +58,7 @@
               <img src="images/faces/face1.jpg" alt="profile"/>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" href="logout.php">
+              <a onclick="return confirm('Yakin ingin logout?');" class="dropdown-item" href="logout.php">
                 <i class="ti-power-off text-primary"></i>
                 Logout
               </a>

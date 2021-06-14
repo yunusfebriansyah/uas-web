@@ -1,3 +1,13 @@
+<?php
+  require "config.php";
+  
+  if( !isset( $_SESSION["login"] ) ){
+    header("Location:index.php");
+    exit;
+    die;
+  }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +50,7 @@
               <img src="images/faces/face1.jpg" alt="profile"/>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" href="logout.php">
+              <a onclick="return confirm('Yakin ingin logout?');" class="dropdown-item" href="logout.php">
                 <i class="ti-power-off text-primary"></i>
                 Logout
               </a>
@@ -84,9 +94,29 @@
             <div class="col-md-12 grid-margin">
               
               <!-- content -->
-              
+
+              <!-- alert -->
+              <?php
+                if( isset($_SESSION["pesan"]) && $_SESSION["pesan"] !== NULL ) :
+              ?>
+                <div class="row">
+                  <div class="col-12">
+                  <div class="alert bg-<?= $_SESSION["pesan"]["color"] ?> text-white alert-dismissible fade show" role="alert">
+                    <?= $_SESSION["pesan"]["data"] ?> <strong><?= $_SESSION["pesan"]["notif"] ?>!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            <?php
+              endif;
+            ?>
+            <!-- end alert -->
+            
               <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                  <h3 class="font-weight-bold">Hai <span class="text-primary"><?= $_SESSION["login"]["namaUser"]; ?></span>!</h3>
                   <h3 class="font-weight-bold">Welcome to My App</h3>
                   <h6 class="font-weight-normal mb-0">Dibuat untuk memenuhi Ujian Semester Web Design Semester 4 Informatika</h6>
                 </div>
@@ -156,3 +186,6 @@
 
 </html>
 
+<?php
+  stopSession();
+?>

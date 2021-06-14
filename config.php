@@ -8,8 +8,8 @@ if( !isset($_SESSION["pesan"]) ){
 
 function stopSession()
 {
-  session_unset();
-  session_destroy();
+  $_SESSION["pesan"] = NULL;
+  $_SESSION["logout"] = NULL;
 }
 
 function readData()
@@ -53,7 +53,7 @@ function tambahMahasiswa($data)
   $namaMahasiswa = htmlspecialchars($data["namaMahasiswa"]);
   $jurusan = htmlspecialchars($data["jurusan"]);
 
-  $query = mysqli_query($koneksi, "INSERT INTO tblmahasiswa VALUES(NULL, '$npmMhs', '$namaMahasiswa', '$jurusan', '1')");
+  mysqli_query($koneksi, "INSERT INTO tblmahasiswa VALUES(NULL, '$npmMhs', '$namaMahasiswa', '$jurusan', '1')");
 
   return mysqli_affected_rows($koneksi);
 }
@@ -67,7 +67,7 @@ function ubahMahasiswa($data)
   $namaMahasiswa = htmlspecialchars($data["namaMahasiswa"]);
   $jurusan = htmlspecialchars($data["jurusan"]);
 
-  $query = mysqli_query($koneksi, "UPDATE tblmahasiswa SET npmMhs = '$npmMhs', namaMahasiswa = '$namaMahasiswa', jurusan = '$jurusan' WHERE idMhs = $idMhs AND isActive = '1'");
+  mysqli_query($koneksi, "UPDATE tblmahasiswa SET npmMhs = '$npmMhs', namaMahasiswa = '$namaMahasiswa', jurusan = '$jurusan' WHERE idMhs = $idMhs AND isActive = '1'");
 
   return mysqli_affected_rows($koneksi);
 }
@@ -75,6 +75,39 @@ function ubahMahasiswa($data)
 function deleteMahasiswa( $id )
 {
   global $koneksi;
-  $query = mysqli_query($koneksi, "UPDATE tblmahasiswa SET isActive = '0' WHERE idMhs = $id");
+  mysqli_query($koneksi, "UPDATE tblmahasiswa SET isActive = '0' WHERE idMhs = $id");
   return mysqli_affected_rows($koneksi);
+}
+
+function daftar( $data )
+{
+  global $koneksi;
+  $nama = htmlspecialchars($data["nama"]);
+  $username = htmlspecialchars($data["username"]);
+  $password =  password_hash($data["password"], PASSWORD_DEFAULT);
+  mysqli_query($koneksi, "INSERT INTO tbluser VALUES(NULL, '$nama', '$username', '$password', '1')");
+  return mysqli_affected_rows($koneksi);
+}
+
+function login( $data )
+{
+  global $koneksi;
+  $username = htmlspecialchars($data["username"]);
+  $password = $data["password"];
+
+  $result = mysqli_query($koneksi, "SELECT * FROM tbluser WHERE username = '$username'");
+  if( mysqli_num_rows($result) === 1 ){
+
+    $row = mysqli_fetch_assoc($result);
+    if( password_verify( $password, $row["password"] ) ){
+      $_SESSION["login"] = ["idUser" => $row["idUser"], "namaUser" => $row["namaUser"] ];
+      return 1;
+    }else{
+      return 0;
+    }
+
+  }else{
+    return 0;
+  }
+  
 }
