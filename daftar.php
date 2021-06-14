@@ -1,7 +1,7 @@
 <?php
   require "config.php";
   
-  if( isset( $_SESSION["login"] ) ){
+  if( isset( $_SESSION["login"] ) &&  $_SESSION["login"] !== NULL ){
     header("Location:home.php");
     exit;
     die;

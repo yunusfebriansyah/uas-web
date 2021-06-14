@@ -9,7 +9,6 @@ if( !isset($_SESSION["pesan"]) ){
 function stopSession()
 {
   $_SESSION["pesan"] = NULL;
-  $_SESSION["logout"] = NULL;
 }
 
 function readData()
