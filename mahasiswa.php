@@ -38,8 +38,8 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5 font-weight-500" href="index.php">UAS</a>
-        <a class="navbar-brand brand-logo-mini font-weight-500" href="index.php">UAS</a>
+        <a class="navbar-brand brand-logo mr-5 font-weight-500" href="home.php">UAS</a>
+        <a class="navbar-brand brand-logo-mini font-weight-500" href="home.php">UAS</a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -70,7 +70,7 @@
           <!-- link sidebar -->
           
           <li class="nav-item">
-            <a class="nav-link" href="index.php">
+            <a class="nav-link" href="home.php">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
@@ -165,11 +165,11 @@
                         
                         <div class="form-group">
                           <label for="npm" class="font-weight-500">NPM :</label>
-                          <input required type="text" name="npmMhs" id="npm" class="form-control" placeholder="Isi NPM mahasiswa">
+                          <input required type="number" name="npmMhs" id="npm" class="form-control" placeholder="Isi NPM mahasiswa">
                         </div>
                         <div class="form-group">
                           <label for="nama" class="font-weight-500">Nama :</label>
-                          <input required type="number" name="namaMahasiswa" id="nama" class="form-control" placeholder="Isi nama mahasiswa">
+                          <input required type="text" name="namaMahasiswa" id="nama" class="form-control" placeholder="Isi nama mahasiswa">
                         </div>
                         <div class="form-group">
                           <label for="jurusan" class="font-weight-500">Jurusan :</label>
