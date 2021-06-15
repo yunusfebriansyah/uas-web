@@ -84,8 +84,13 @@ function daftar( $data )
   $nama = htmlspecialchars($data["nama"]);
   $username = htmlspecialchars($data["username"]);
   $password =  password_hash($data["password"], PASSWORD_DEFAULT);
-  mysqli_query($koneksi, "INSERT INTO tbluser VALUES(NULL, '$nama', '$username', '$password', '1')");
-  return mysqli_affected_rows($koneksi);
+  $result = mysqli_query($koneksi, "SELECT * FROM tbluser WHERE username = '$username'");
+  if( mysqli_num_rows($result) === 0 ){
+    mysqli_query($koneksi, "INSERT INTO tbluser VALUES(NULL, '$nama', '$username', '$password', '1')");
+    return mysqli_affected_rows($koneksi);
+  }else{
+    return 0;
+  }
 }
 
 function login( $data )
